@@ -4,62 +4,46 @@ import websocket
 import json
 import curses
 
-# Initialize new variables
-integers = [0]  # List of integers, the length can vary
-int_tuples = (0, 0)  # Tuple of integers
-float_tuples = (0.0, 0.0)  # Tuple of decimal floats
+# Initialize variables
+integers = [0]  # Example with a single integer for simplicity
+int_tuples = (0, 0)
+float_tuples = (0.0, 0.0)
 lock = threading.Lock()
 is_running = True
-
-def display_values(stdscr):
-    stdscr.clear()
-    stdscr.addstr("Control the values using keyboard keys. Press 'ESC' to exit.\n")
-    stdscr.addstr(f'Integers: {integers}\n')
-    stdscr.addstr(f'Int Tuples: {int_tuples}\n')
-    stdscr.addstr(f'Float Tuples: {float_tuples}\n')
-    stdscr.refresh()
 
 def clamp(value, min_value, max_value):
     return max(min(value, max_value), min_value)
 
-def update_values(stdscr):
-    global integers, int_tuples, float_tuples, is_running
-    stdscr.nodelay(True)
+def adjust_element(key):
+    '''
+        Here is where to adjust the keybindings for manipulation.
+    
+    '''
 
-    key_actions = {
-        '1': lambda: update_integers(1),
-        '2': lambda: update_integers(-1),
-        't': lambda: update_int_tuples(),
-        'f': lambda: update_float_tuples(),
-    }
+    global integers, int_tuples, float_tuples
 
-    while is_running:
-        try:
-            key = stdscr.getkey()
-            if key == '\x1b':  # ESC key for exit
-                is_running = False
-            elif key in key_actions:
-                key_actions[key]()
-                display_values(stdscr)
-        except Exception as e:
-            pass
+    if key == 'q':
+        integers[0] = clamp(integers[0] + 1, 0, 99)
+    elif key == 'w':
+        integers[0] = clamp(integers[0] - 1, 0, 99)
 
-def update_integers(delta):
-    # Example action for modifying the integer list
-    if len(integers) < 5:  # Example condition, modify as needed
-        integers.append(integers[-1] + delta)
-    else:
-        integers.clear()  # Reset when reaching a certain condition
+    elif key == 'e':
+        int_tuples = (clamp(int_tuples[0] + 1, -99, 99), int_tuples[1])
+    elif key == 'r':
+        int_tuples = (clamp(int_tuples[0] - 1, -99, 99), int_tuples[1])
+    elif key == 't':
+        int_tuples = (int_tuples[0], clamp(int_tuples[1] + 1, -99, 99))
+    elif key == 'y':
+        int_tuples = (int_tuples[0], clamp(int_tuples[1] - 1, -99, 99))
 
-def update_int_tuples():
-    global int_tuples
-    # Example action for modifying the integer tuple
-    int_tuples = (int_tuples[0] + 1, int_tuples[1] - 1)
-
-def update_float_tuples():
-    global float_tuples
-    # Example action for modifying the float tuple
-    float_tuples = (float_tuples[0] + 0.1, float_tuples[1] - 0.1)
+    elif key == 'u':
+        float_tuples = (clamp(float_tuples[0] + 0.1, -99.0, 99.0), float_tuples[1])
+    elif key == 'i':
+        float_tuples = (clamp(float_tuples[0] - 0.1, -99.0, 99.0), float_tuples[1])
+    elif key == 'o':
+        float_tuples = (float_tuples[0], clamp(float_tuples[1] + 0.1, -99.0, 99.0))
+    elif key == 'p':
+        float_tuples = (float_tuples[0], clamp(float_tuples[1] - 0.1, -99.0, 99.0))
 
 def send_data(ws):
     while is_running:
@@ -67,8 +51,8 @@ def send_data(ws):
             with lock:
                 data = {
                     "integers": integers,
-                    "int_tuples": int_tuples,
-                    "float_tuples": float_tuples,
+                    "int_tuples": [list(int_tuples)],  
+                    "float_tuples": [list(float_tuples)], 
                 }
             ws.send(json.dumps(data))
         except websocket.WebSocketConnectionClosedException:
@@ -79,15 +63,47 @@ def send_data(ws):
         except Exception as e:
             print(f"Error in sending data: {e}")
             break
-        time.sleep(0.1)  # Sending data at 10 Hz
+        time.sleep(0.1)
 
 def start_websocket():
-    uri = "ws://192.168.1.22:6969"
+    uri = "ws://10.13.176.189:6969" # Adjust IP address here to match your private ip address
     ws = websocket.WebSocketApp(uri, on_open=lambda ws: threading.Thread(target=send_data, args=(ws,)).start())
     ws.run_forever()
 
-threading.Thread(target=start_websocket, daemon=True).start()
+def display_values(stdscr):
+    '''
+        Display the values of the elements on the terminal.
+        adjust the display to match the elements you are working with.
+    '''
 
+    stdscr.clear()
+    stdscr.addstr("Control individual elements with specific keys. Press 'ESC' to exit.\n")
+    stdscr.addstr(f"Integers: {integers} ('q' to increase, 'w' to decrease)\n")
+    stdscr.addstr(f"Int Tuples: {int_tuples} ('e', 'r' to increase, 't', 'y' to decrease)\n")
+    stdscr.addstr(f"Float Tuples: {float_tuples} ('u', 'i' to increase, 'o', 'p' to decrease)\n")
+    stdscr.refresh()
+
+def process_input(stdscr, key):
+    adjust_element(key)
+    display_values(stdscr)
+
+def update_values(stdscr):
+    global is_running
+    stdscr.nodelay(True)
+    display_values(stdscr)
+
+    while is_running:
+        try:
+            key = stdscr.getkey()
+            if key == '\x1b':  # ESC key for exit
+                is_running = False
+            else:
+                process_input(stdscr, key)
+        except Exception as e:
+            pass
+
+threading.Thread(target=start_websocket, daemon=True).start()
 curses.wrapper(update_values)
+
 is_running = False
 print("Exiting application...")

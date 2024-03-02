@@ -1,0 +1,33 @@
+running egg_info
+creating ../../build/inverse_kin/inverseKin.egg-info
+writing ../../build/inverse_kin/inverseKin.egg-info/PKG-INFO
+writing dependency_links to ../../build/inverse_kin/inverseKin.egg-info/dependency_links.txt
+writing entry points to ../../build/inverse_kin/inverseKin.egg-info/entry_points.txt
+writing requirements to ../../build/inverse_kin/inverseKin.egg-info/requires.txt
+writing top-level names to ../../build/inverse_kin/inverseKin.egg-info/top_level.txt
+writing manifest file '../../build/inverse_kin/inverseKin.egg-info/SOURCES.txt'
+reading manifest file '../../build/inverse_kin/inverseKin.egg-info/SOURCES.txt'
+writing manifest file '../../build/inverse_kin/inverseKin.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/build
+creating /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/build/lib
+creating /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/build/lib/inverseKin
+copying inverseKin/server.py -> /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/build/lib/inverseKin
+copying inverseKin/__init__.py -> /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/build/lib/inverseKin
+running install
+running install_lib
+creating /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/lib/python3.10/site-packages/inverseKin
+copying /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/build/lib/inverseKin/server.py -> /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/lib/python3.10/site-packages/inverseKin
+copying /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/build/lib/inverseKin/__init__.py -> /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/lib/python3.10/site-packages/inverseKin
+byte-compiling /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/lib/python3.10/site-packages/inverseKin/server.py to server.cpython-310.pyc
+byte-compiling /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/lib/python3.10/site-packages/inverseKin/__init__.py to __init__.cpython-310.pyc
+running install_data
+copying resource/inverseKin -> /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/share/ament_index/resource_index/packages
+creating /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/share/inverseKin
+copying package.xml -> /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/share/inverseKin
+running install_egg_info
+Copying ../../build/inverse_kin/inverseKin.egg-info to /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/lib/python3.10/site-packages/inverseKin-0.0.0-py3.10.egg-info
+running install_scripts
+Installing server script to /home/magdy/Documents/MyGithub/SendTuples/inverse_kin/install/inverse_kin/lib/inverse_kin
+writing list of installed files to '/home/magdy/Documents/MyGithub/SendTuples/inverse_kin/build/inverse_kin/install.log'
